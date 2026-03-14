@@ -1,20 +1,34 @@
 ![demo](./public/image.png)
 
-# Claude Code Dashboard (CC-board)
+# Claude Code Lens (cc-lens)
 
-A real-time monitoring dashboard for **Claude Code** analytics. Reads directly from `~/.claude/` — no cloud, no telemetry, just your local data.
+A real-time monitoring dashboard for **Claude Code** analytics. Reads directly from `~/.claude/` - no cloud, no telemetry, just your local data.
+
+## Quick Start
+
+![cc-board CLI](./public/cc-lens.png)
+
+Run with a single command — no install needed:
+
+```bash
+npx cc-lens
+```
+
+That's it. The CLI finds a free port, starts the server, and opens the dashboard in your browser automatically.
 
 ## Features
 
-- **Overview** — Token usage over time, project activity distribution, peak hours, model breakdown, recent conversations
-- **Projects** — Card grid with sessions, cost per session, most-used tools, languages, git branches
-- **Sessions** — Sortable table with search, filters (compacted, agent, MCP), and full session replay
-- **Costs** — Model breakdown, cost by project, cache efficiency
-- **Tools** — Tool ranking by category, MCP server usage, feature adoption
-- **Activity** — Streaks, day-of-week patterns, usage over time
-- **Export** — Download `.ccboard.json` or import with additive merge preview
+- **Overview** - Token usage over time, project activity distribution, peak hours, model breakdown, recent conversations
+- **Projects** - Card grid with sessions, cost per session, most-used tools, languages, git branches
+- **Sessions** - Sortable table with search, filters (compacted, agent, MCP), and full session replay
+- **Costs** - Model breakdown, cost by project, cache efficiency
+- **Tools** - Tool ranking by category, MCP server usage, feature adoption
+- **Activity** - Streaks, day-of-week patterns, usage over time
+- **Export** - Download `.ccboard.json` or import with additive merge preview
 
-## Getting Started
+## Manual Setup
+
+If you prefer to run it locally from source:
 
 ### Prerequisites
 
@@ -39,13 +53,13 @@ npm start
 
 ## Data Source
 
-- `~/.claude/projects/<slug>/*.jsonl` — Session JSONL (primary)
-- `~/.claude/stats-cache.json` — Aggregated stats
-- `~/.claude/usage-data/session-meta/` — Session metadata (fallback)
+- `~/.claude/projects/<slug>/*.jsonl` - Session JSONL (primary)
+- `~/.claude/stats-cache.json` - Aggregated stats
+- `~/.claude/usage-data/session-meta/` - Session metadata (fallback)
 
 Data refreshes every 5 seconds while the dashboard is open.
 
 ## Tech Stack
 
-- Next.js 16 · React 19 · TypeScript
-- Tailwind CSS · Recharts · SWR
+- Next.js 16 - React 19 - TypeScript
+- Tailwind CSS - Recharts - SWR
