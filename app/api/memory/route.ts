@@ -43,6 +43,7 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: 'Path outside allowed directory' }, { status: 403 })
     }
 
+    await fs.mkdir(path.dirname(filePath), { recursive: true })
     await fs.writeFile(filePath, content, 'utf-8')
     return NextResponse.json({ ok: true })
   } catch (err) {

@@ -59,11 +59,18 @@ function openBrowser(url) {
 async function main() {
   printBanner()
 
-  const nextBin = path.join(PKG_DIR, 'node_modules', '.bin', 'next')
+  const nextBin = path.join(PKG_DIR, 'node_modules', '.bin', process.platform === 'win32' ? 'next.cmd' : 'next')
 
   if (!fs.existsSync(nextBin)) {
-    console.error('❌  Dependencies missing. Run: npm install')
-    process.exit(1)
+    console.log(`  ${DIM}Installing dependencies…${R}\n`)
+    await new Promise((resolve, reject) => {
+      const install = spawn('npm', ['install', '--prefer-offline'], {
+        cwd: PKG_DIR,
+        stdio: 'inherit',
+        shell: true,
+      })
+      install.on('exit', (code) => code === 0 ? resolve() : reject(new Error(`npm install failed (exit ${code})`)))
+    })
   }
 
   const port = await findFreePort(3000)
