@@ -45,14 +45,12 @@ export async function GET() {
     getClaudeStorageBytes(),
   ])
 
-  if (!stats) {
-    return NextResponse.json({ error: 'stats-cache.json not found' }, { status: 404 })
-  }
-
   const dailyFromSessions = computeDailyActivityFromSessions(sessions)
-  const dailyActivity = mergeDailyActivity(stats.dailyActivity ?? [], dailyFromSessions)
+  const dailyActivity = stats
+    ? mergeDailyActivity(stats.dailyActivity ?? [], dailyFromSessions)
+    : dailyFromSessions
 
-  const modelUsage = stats.modelUsage ?? {}
+  const modelUsage = stats?.modelUsage ?? {}
 
   // Compute estimated total cost from modelUsage
   let totalCost = 0
@@ -109,8 +107,24 @@ export async function GET() {
     s => new Date(s.start_time) >= weekStart
   ).length
 
+  const statsOut = stats
+    ? { ...stats, dailyActivity }
+    : {
+        version: 0,
+        lastComputedDate: '',
+        dailyActivity,
+        tokensByDate: [],
+        modelUsage: {},
+        totalSessions: sessions.length,
+        totalMessages: sessions.reduce((s, m) => s + (m.user_message_count ?? 0) + (m.assistant_message_count ?? 0), 0),
+        longestSession: { sessionId: '', duration: 0, messageCount: 0, timestamp: '' },
+        firstSessionDate: sessions[sessions.length - 1]?.start_time ?? '',
+        hourCounts: {},
+        totalSpeculationTimeSavedMs: 0,
+      }
+
   return NextResponse.json({
-    stats: { ...stats, dailyActivity },
+    stats: statsOut,
     computed: {
       totalCost,
       totalCacheSavings,

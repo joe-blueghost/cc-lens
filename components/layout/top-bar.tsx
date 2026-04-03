@@ -27,9 +27,11 @@ function formatTimestamp(d: Date) {
 export function TopBar({ title, subtitle, showStarButton = false }: TopBarProps) {
   const router = useRouter()
   const [refreshing, setRefreshing] = useState(false)
-  const [now, setNow] = useState<string>(() => formatTimestamp(new Date()))
+  const [now, setNow] = useState<string>('')
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setNow(formatTimestamp(new Date()))
     const id = setInterval(() => setNow(formatTimestamp(new Date())), 1000)
     return () => clearInterval(id)
   }, [])
@@ -53,7 +55,7 @@ export function TopBar({ title, subtitle, showStarButton = false }: TopBarProps)
         {subtitle && (
           <p className="text-base text-muted-foreground font-mono pl-6">{subtitle}</p>
         )}
-        <p className="text-sm text-muted-foreground/60 font-mono pl-6">
+        <p className="text-sm text-muted-foreground/60 font-mono pl-6" suppressHydrationWarning>
           last update: {displayTime}
         </p>
       </div>

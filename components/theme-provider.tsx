@@ -14,14 +14,14 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return 'dark'
-    return (localStorage.getItem('theme') as Theme) ?? 'dark'
-  })
+  const [theme, setTheme] = useState<Theme>('dark')
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-  }, [theme])
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    const stored = (localStorage.getItem('theme') as Theme) ?? 'dark'
+    setTheme(stored)
+    document.documentElement.classList.toggle('dark', stored === 'dark')
+  }, [])
 
   function toggle() {
     setTheme(prev => {
