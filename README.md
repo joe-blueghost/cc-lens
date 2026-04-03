@@ -69,7 +69,12 @@ npm start
 
 Data refreshes every 5 seconds while the dashboard is open.
 
-## Tech Stack
+## Star History
 
-- Next.js 15 · React 19 · TypeScript
-- Tailwind CSS · Recharts · SWR
+<a href="https://www.star-history.com/?repos=Arindam200%2Fcc-lens&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Arindam200/cc-lens&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Arindam200/cc-lens&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Arindam200/cc-lens&type=date&legend=top-left" />
+ </picture>
+</a>
