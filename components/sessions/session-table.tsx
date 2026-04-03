@@ -15,6 +15,26 @@ interface Props {
   sessions: SessionWithFacet[]
 }
 
+function SortHeader({
+  label, k, sortKey, sortDir, onSort,
+}: {
+  label: string
+  k: SortKey
+  sortKey: SortKey
+  sortDir: SortDir
+  onSort: (k: SortKey) => void
+}) {
+  const active = sortKey === k
+  return (
+    <button
+      onClick={() => onSort(k)}
+      className={`text-left text-[12px] font-bold uppercase tracking-wider whitespace-nowrap hover:text-foreground transition-colors ${active ? 'text-primary' : 'text-muted-foreground'}`}
+    >
+      {label} {active ? (sortDir === 'desc' ? '↓' : '↑') : ''}
+    </button>
+  )
+}
+
 export function SessionTable({ sessions }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>('start_time')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
@@ -69,18 +89,6 @@ export function SessionTable({ sessions }: Props) {
     setPage(1)
   }
 
-  function SortHeader({ label, k }: { label: string; k: SortKey }) {
-    const active = sortKey === k
-    return (
-      <button
-        onClick={() => toggleSort(k)}
-        className={`text-left text-[12px] font-bold uppercase tracking-wider whitespace-nowrap hover:text-foreground transition-colors ${active ? 'text-primary' : 'text-muted-foreground'}`}
-      >
-        {label} {active ? (sortDir === 'desc' ? '↓' : '↑') : ''}
-      </button>
-    )
-  }
-
   return (
     <div className="space-y-3">
       {/* Filters */}
@@ -130,12 +138,12 @@ export function SessionTable({ sessions }: Props) {
           <table className="w-full text-[13px]">
             <thead>
               <tr className="border-b border-border bg-muted">
-                <th className="px-3 py-2 text-left"><SortHeader label="Date" k="start_time" /></th>
+                <th className="px-3 py-2 text-left"><SortHeader label="Date" k="start_time" sortKey={sortKey} sortDir={sortDir} onSort={toggleSort} /></th>
                 <th className="px-3 py-2 text-left"><span className="text-[12px] font-bold uppercase tracking-wider text-muted-foreground">Project</span></th>
-                <th className="px-3 py-2 text-right"><SortHeader label="Dur" k="duration_minutes" /></th>
-                <th className="px-3 py-2 text-right"><SortHeader label="Msgs" k="total_messages" /></th>
-                <th className="px-3 py-2 text-right"><SortHeader label="Tools" k="tool_calls" /></th>
-                <th className="px-3 py-2 text-right"><SortHeader label="Cost" k="estimated_cost" /></th>
+                <th className="px-3 py-2 text-right"><SortHeader label="Dur" k="duration_minutes" sortKey={sortKey} sortDir={sortDir} onSort={toggleSort} /></th>
+                <th className="px-3 py-2 text-right"><SortHeader label="Msgs" k="total_messages" sortKey={sortKey} sortDir={sortDir} onSort={toggleSort} /></th>
+                <th className="px-3 py-2 text-right"><SortHeader label="Tools" k="tool_calls" sortKey={sortKey} sortDir={sortDir} onSort={toggleSort} /></th>
+                <th className="px-3 py-2 text-right"><SortHeader label="Cost" k="estimated_cost" sortKey={sortKey} sortDir={sortDir} onSort={toggleSort} /></th>
                 <th className="px-3 py-2 text-left"><span className="text-[12px] font-bold uppercase tracking-wider text-muted-foreground">Flags</span></th>
               </tr>
             </thead>

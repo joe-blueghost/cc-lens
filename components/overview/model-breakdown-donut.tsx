@@ -50,7 +50,7 @@ export function ModelBreakdownDonut({ modelUsage }: Props) {
   const data = Object.entries(modelUsage)
     .map(([model, usage]) => ({
       name: shortModelName(model),
-      value: usage.inputTokens + usage.outputTokens + usage.cacheReadInputTokens + usage.cacheCreationInputTokens,
+      value: (usage.inputTokens ?? 0) + (usage.outputTokens ?? 0) + (usage.cacheReadInputTokens ?? 0) + (usage.cacheCreationInputTokens ?? 0),
     }))
     .filter(d => d.value > 0)
     .sort((a, b) => b.value - a.value)

@@ -55,12 +55,12 @@ interface Props {
 }
 
 export function ProjectCard({ project }: Props) {
-  const topTools = Object.entries(project.tool_counts)
+  const topTools = Object.entries(project.tool_counts ?? {})
     .sort(([, a], [, b]) => b - a)
     .slice(0, 5)
   const maxToolCount = topTools[0]?.[1] ?? 1
 
-  const topLangs = Object.entries(project.languages)
+  const topLangs = Object.entries(project.languages ?? {})
     .sort(([, a], [, b]) => b - a)
     .slice(0, 3)
 

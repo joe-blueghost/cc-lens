@@ -23,6 +23,7 @@ export function OverviewConversationTable({ sessions }: Props) {
   const [filter, setFilter] = useState<FilterType>('recent')
 
   const filtered = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity
     const now = Date.now()
     const oneDay = 24 * 60 * 60 * 1000
     const oneWeek = 7 * oneDay
@@ -116,6 +117,7 @@ export function OverviewConversationTable({ sessions }: Props) {
                 const totalMsgs = (s.user_message_count ?? 0) + (s.assistant_message_count ?? 0)
                 const totalTokens = (s.input_tokens ?? 0) + (s.output_tokens ?? 0)
                 const projectName = projectDisplayName(s.project_path ?? '')
+                // eslint-disable-next-line react-hooks/purity
                 const isRecent = Date.now() - new Date(s.start_time).getTime() < 24 * 60 * 60 * 1000
                 const status = isRecent ? 'active' : 'inactive'
 

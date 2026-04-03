@@ -9,7 +9,8 @@ import { CATEGORY_COLORS, categorizeTool } from '@/lib/tool-categories'
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import type { SessionWithFacet } from '@/types/claude'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) =>
+  fetch(url).then(r => { if (!r.ok) throw new Error(`API error ${r.status}`); return r.json() })
 
 interface ProjectDetail {
   project_path: string

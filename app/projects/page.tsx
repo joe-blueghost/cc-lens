@@ -6,7 +6,8 @@ import { TopBar } from '@/components/layout/top-bar'
 import { ProjectCard } from '@/components/projects/project-card'
 import type { ProjectSummary } from '@/types/claude'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) =>
+  fetch(url).then(r => { if (!r.ok) throw new Error(`API error ${r.status}`); return r.json() })
 
 type SortKey = 'last_active' | 'estimated_cost' | 'session_count' | 'total_duration_minutes'
 

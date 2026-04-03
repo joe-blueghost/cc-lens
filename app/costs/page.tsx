@@ -10,7 +10,8 @@ import { formatCost, formatTokens } from '@/lib/decode'
 import { PRICING } from '@/lib/pricing'
 import type { CostAnalytics } from '@/types/claude'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) =>
+  fetch(url).then(r => { if (!r.ok) throw new Error(`API error ${r.status}`); return r.json() })
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (

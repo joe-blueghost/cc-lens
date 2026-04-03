@@ -10,9 +10,10 @@ import { SessionBadges } from '@/components/sessions/session-badges'
 import { formatCost, formatTokens, formatDuration, projectDisplayName } from '@/lib/decode'
 import type { ReplayData, SessionMeta } from '@/types/claude'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) =>
+  fetch(url).then(r => { if (!r.ok) throw new Error(`API error ${r.status}`); return r.json() })
 
-interface ReplayResponse extends ReplayData {}
+type ReplayResponse = ReplayData
 
 export default function SessionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -84,7 +85,7 @@ export default function SessionDetailPage({ params }: { params: Promise<{ id: st
       {/* Header */}
       <TopBar
         title={`${projectName} · ${replay.slug ?? id.slice(0, 8)}`}
-        subtitle={`${replay.git_branch ?? '?'} · v${replay.version ?? '?'} · ${formatCost(replay.total_cost)}`}
+        subtitle={`${replay.git_branch ?? '?'} · v${replay.version ?? '?'} · ${formatCost(replay.total_cost ?? 0)}`}
       />
 
       {/* Stats bar */}
@@ -98,7 +99,7 @@ export default function SessionDetailPage({ params }: { params: Promise<{ id: st
         </span>
         <span className="text-border">·</span>
         <span className="text-muted-foreground">
-          cost: <span className="text-[#d97706] font-bold">{formatCost(replay.total_cost)}</span>
+          cost: <span className="text-[#d97706] font-bold">{formatCost(replay.total_cost ?? 0)}</span>
         </span>
         {meta && (
           <>

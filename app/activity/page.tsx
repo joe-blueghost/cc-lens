@@ -9,7 +9,8 @@ import { StreakCard } from '@/components/activity/streak-card'
 import { UsageOverTimeChart } from '@/components/overview/usage-over-time-chart'
 import type { DailyActivity } from '@/types/claude'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) =>
+  fetch(url).then(r => { if (!r.ok) throw new Error(`API error ${r.status}`); return r.json() })
 
 interface ActivityData {
   daily_activity: DailyActivity[]

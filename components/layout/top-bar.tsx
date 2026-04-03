@@ -27,10 +27,9 @@ function formatTimestamp(d: Date) {
 export function TopBar({ title, subtitle, showStarButton = false }: TopBarProps) {
   const router = useRouter()
   const [refreshing, setRefreshing] = useState(false)
-  const [now, setNow] = useState<string>('')
+  const [now, setNow] = useState<string>(() => formatTimestamp(new Date()))
 
   useEffect(() => {
-    setNow(formatTimestamp(new Date()))
     const id = setInterval(() => setNow(formatTimestamp(new Date())), 1000)
     return () => clearInterval(id)
   }, [])

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import useSWR from 'swr'
 import { BarChart3, PieChart } from 'lucide-react'
 import { UsageOverTimeChart } from '@/components/overview/usage-over-time-chart'
@@ -34,7 +34,11 @@ interface ApiResponse {
   }
 }
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) =>
+  fetch(url).then(r => {
+    if (!r.ok) throw new Error(`API error ${r.status}`)
+    return r.json()
+  })
 
 function TStat({
   label,
@@ -86,13 +90,8 @@ function ChartCard({
 }
 
 export function OverviewClient() {
-  const [dateFrom, setDateFrom] = useState('')
-  const [dateTo, setDateTo] = useState('')
-
-  useEffect(() => {
-    setDateFrom(format(subDays(new Date(), 7), 'MM/dd/yyyy'))
-    setDateTo(format(new Date(), 'MM/dd/yyyy'))
-  }, [])
+  const [dateFrom, setDateFrom] = useState(() => format(subDays(new Date(), 7), 'MM/dd/yyyy'))
+  const [dateTo, setDateTo] = useState(() => format(new Date(), 'MM/dd/yyyy'))
 
   const { data, error, isLoading } = useSWR<ApiResponse>('/api/stats', fetcher, {
     refreshInterval: 5_000,
@@ -230,7 +229,7 @@ export function OverviewClient() {
       {/* ── Peak hours + model breakdown ── */}
       <div className="grid grid-cols-2 gap-6">
         <ChartCard title="Peak hours">
-          <PeakHoursChart hourCounts={stats.hourCounts} />
+          <PeakHoursChart hourCounts={stats.hourCounts ?? {}} />
         </ChartCard>
 
         <ChartCard title="Model distribution">

@@ -6,7 +6,8 @@ import { TopBar } from '@/components/layout/top-bar'
 import type { MemoryEntry, MemoryType } from '@/lib/claude-reader'
 import { projectDisplayName, projectShortPath, formatRelativeDate } from '@/lib/decode'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) =>
+  fetch(url).then(r => { if (!r.ok) throw new Error(`API error ${r.status}`); return r.json() })
 
 // ── Type config ───────────────────────────────────────────────────────────────
 
@@ -32,6 +33,7 @@ function TypeBadge({ type }: { type: MemoryType }) {
 }
 
 function StaleBadge({ mtime }: { mtime: string }) {
+  // eslint-disable-next-line react-hooks/purity
   const daysOld = Math.floor((Date.now() - new Date(mtime).getTime()) / 86_400_000)
   if (daysOld < 30) return null
   return (
@@ -226,6 +228,7 @@ export default function MemoryPage() {
   }, [memories])
 
   const staleCount = useMemo(
+    // eslint-disable-next-line react-hooks/purity
     () => memories.filter(m => (Date.now() - new Date(m.mtime).getTime()) / 86_400_000 >= 30).length,
     [memories]
   )

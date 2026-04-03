@@ -80,7 +80,7 @@ export async function GET() {
   // Aggregate tool calls total
   let totalToolCalls = 0
   for (const s of sessions) {
-    for (const count of Object.values(s.tool_counts)) {
+    for (const count of Object.values(s.tool_counts ?? {})) {
       totalToolCalls += count
     }
   }

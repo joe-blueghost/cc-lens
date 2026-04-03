@@ -24,7 +24,7 @@ function computeStreaks(dates: Set<string>): { current: number; longest: number 
   // Current streak (from today backwards)
   const today = new Date().toISOString().slice(0, 10)
   let current = 0
-  let d = new Date(today)
+  const d = new Date(today)
   while (dates.has(d.toISOString().slice(0, 10))) {
     current++
     d.setDate(d.getDate() - 1)

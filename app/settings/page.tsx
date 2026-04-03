@@ -4,7 +4,8 @@ import useSWR from 'swr'
 import { TopBar } from '@/components/layout/top-bar'
 import type { SkillInfo, PluginInfo } from '@/lib/claude-reader'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) =>
+  fetch(url).then(r => { if (!r.ok) throw new Error(`API error ${r.status}`); return r.json() })
 
 function formatBytes(b: number) {
   if (b >= 1_073_741_824) return (b / 1_073_741_824).toFixed(2) + ' GB'

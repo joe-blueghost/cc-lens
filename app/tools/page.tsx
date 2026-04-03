@@ -10,7 +10,8 @@ import { CATEGORY_COLORS, CATEGORY_LABELS } from '@/lib/tool-categories'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell, ResponsiveContainer } from 'recharts'
 import type { ToolsAnalytics } from '@/types/claude'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) =>
+  fetch(url).then(r => { if (!r.ok) throw new Error(`API error ${r.status}`); return r.json() })
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -87,10 +88,10 @@ export default function ToolsPage() {
             <Card title="Feature Adoption">
               <FeatureAdoptionTable
                 adoption={data.feature_adoption}
-                totalSessions={Object.values(data.feature_adoption)[0]
-                  ? Math.round(Object.values(data.feature_adoption)[0].sessions /
-                      Math.max(0.001, Object.values(data.feature_adoption)[0].pct))
-                  : 0}
+                totalSessions={(() => {
+                  const first = Object.values(data.feature_adoption ?? {})[0]
+                  return first ? Math.round(first.sessions / Math.max(0.001, first.pct)) : 0
+                })()}
               />
             </Card>
 

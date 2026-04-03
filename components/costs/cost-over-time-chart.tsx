@@ -40,7 +40,7 @@ export function CostOverTimeChart({ daily }: Props) {
     const sorted = [...daily].sort((a, b) => a.date.localeCompare(b.date))
     const sliced = sorted.slice(-window)
     const modelSet = new Set<string>()
-    for (const d of sliced) Object.keys(d.costs).forEach(m => modelSet.add(m))
+    for (const d of sliced) Object.keys(d.costs ?? {}).forEach(m => modelSet.add(m))
     const models = [...modelSet]
     return {
       data: sliced.map(d => ({

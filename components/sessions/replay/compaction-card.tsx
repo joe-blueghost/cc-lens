@@ -17,7 +17,7 @@ export function CompactionCard({ event }: { event: CompactionEvent }) {
       </div>
       {event.summary && (
         <p className="mt-1.5 text-sm text-amber-200/60 italic line-clamp-2">
-          "{event.summary}"
+          &ldquo;{event.summary}&rdquo;
         </p>
       )}
     </div>
