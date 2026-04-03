@@ -45,7 +45,9 @@ export async function GET() {
   const activeDates = new Set<string>()
 
   for (const s of sessions) {
+    if (!s.start_time) continue
     const d = new Date(s.start_time)
+    if (isNaN(d.getTime())) continue
     dowCounts[d.getDay()]++
     activeDates.add(s.start_time.slice(0, 10))
   }

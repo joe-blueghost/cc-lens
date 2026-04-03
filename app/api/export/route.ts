@@ -25,10 +25,14 @@ export async function POST(req: Request) {
   const sessionIds = new Set(filteredSessions.map(s => s.session_id))
   const filteredFacets = facets.filter(f => sessionIds.has(f.session_id))
 
+  if (!stats) {
+    return NextResponse.json({ error: 'stats-cache.json not found' }, { status: 404 })
+  }
+
   const payload: ExportPayload = {
     exportedAt: new Date().toISOString(),
     version: '1.0.0',
-    stats: stats!,
+    stats,
     sessions: filteredSessions,
     facets: filteredFacets,
     history,

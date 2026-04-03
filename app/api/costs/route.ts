@@ -23,13 +23,13 @@ export async function GET() {
     totalSavings += eff.savedUSD
     return {
       model,
-      input_tokens: usage.inputTokens,
-      output_tokens: usage.outputTokens,
-      cache_write_tokens: usage.cacheCreationInputTokens,
-      cache_read_tokens: usage.cacheReadInputTokens,
+      input_tokens: usage.inputTokens ?? 0,
+      output_tokens: usage.outputTokens ?? 0,
+      cache_write_tokens: usage.cacheCreationInputTokens ?? 0,
+      cache_read_tokens: usage.cacheReadInputTokens ?? 0,
       estimated_cost: cost,
-      cache_savings: eff.savedUSD,
-      cache_hit_rate: eff.hitRate,
+      cache_savings: eff.savedUSD ?? 0,
+      cache_hit_rate: eff.hitRate ?? 0,
     }
   }).sort((a, b) => b.estimated_cost - a.estimated_cost)
 
@@ -37,7 +37,7 @@ export async function GET() {
   const daily: DailyCost[] = (stats.tokensByDate ?? []).map(d => {
     const costs: Record<string, number> = {}
     let dayTotal = 0
-    for (const [model, tokens] of Object.entries(d.tokensByModel)) {
+    for (const [model, tokens] of Object.entries(d.tokensByModel ?? {})) {
       const p = getPricing(model)
       // tokensByDate only has total tokens, approximate as input+output split 50/50
       const cost = tokens * p.input * 0.5 + tokens * p.output * 0.5
