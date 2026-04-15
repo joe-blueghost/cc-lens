@@ -19,6 +19,7 @@ import { Calendar } from '@/components/ui/calendar'
 import type { StatsCache, DailyActivity, DailyTokens } from '@/types/claude'
 import type { SessionWithFacet, ProjectSummary } from '@/types/claude'
 import { format, subDays } from 'date-fns'
+import { useTheme } from '@/components/theme-provider'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -85,6 +86,7 @@ function getTokenSpark(tokensByDate: DailyTokens[], days = 14): number[] {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function OverviewClient() {
+  const { theme } = useTheme()
   const [datePreset, setDatePreset] = useState<DatePreset>('30d')
   const [customRange, setCustomRange] = useState<CustomRange>({})
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -150,8 +152,9 @@ export function OverviewClient() {
 
   const { stats, computed } = data
 
+  const inputBlue = theme === 'light' ? '#1d4ed8' : '#60a5fa'
   const tokenSegs = [
-    { label: 'input',       value: computed.totalInputTokens,      color: 'var(--viz-sky)' },
+    { label: 'input',       value: computed.totalInputTokens,      color: inputBlue },
     { label: 'output',      value: computed.totalOutputTokens,     color: '#d97706' },
     { label: 'cache read',  value: computed.totalCacheReadTokens,  color: '#34d399' },
     { label: 'cache write', value: computed.totalCacheWriteTokens, color: '#a78bfa' },
@@ -244,7 +247,7 @@ export function OverviewClient() {
           value={formatTokens(computed.totalTokens)}
           description={`${formatTokens(computed.totalCacheReadTokens)} from cache`}
           sparkData={getTokenSpark(tokensByDate)}
-          accentColor="var(--viz-sky)"
+          accentColor={inputBlue}
         />
         <StatCard
           title="Estimated Cost"
@@ -335,31 +338,42 @@ export function OverviewClient() {
           <CardDescription>Distribution across token types (all time)</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex h-2 rounded-full overflow-hidden w-full">
-            {tokenSegs.map(({ label, value, color }) => (
-              <div
-                key={label}
-                style={{ width: `${(value / totalTokens) * 100}%`, backgroundColor: color }}
-              />
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-x-8 gap-y-2">
-            {tokenSegs.map(({ label, value, color }) => (
-              <span key={label} className="inline-flex items-center gap-2">
-                <span
-                  className="inline-block w-2 h-2 rounded-full shrink-0"
-                  style={{ backgroundColor: color }}
-                />
-                <span className="text-[12px] text-muted-foreground">{label}</span>
-                <span className="text-[13px] font-bold tabular-nums font-mono" style={{ color }}>
-                  {formatTokens(value)}
-                </span>
-                <span className="text-[12px] text-muted-foreground/60">
-                  {Math.round((value / totalTokens) * 100)}%
-                </span>
-              </span>
-            ))}
-          </div>
+          {totalTokens > 0 ? (
+            <>
+              <div className="flex h-2 rounded-full overflow-hidden w-full bg-muted/40">
+                {tokenSegs.map(({ label, value, color }) => (
+                  <div
+                    key={label}
+                    title={`${label}: ${formatTokens(value)}`}
+                    style={{
+                      width: `${(value / totalTokens) * 100}%`,
+                      minWidth: value > 0 ? 2 : 0,
+                      backgroundColor: color,
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-x-8 gap-y-2">
+                {tokenSegs.map(({ label, value, color }) => (
+                  <span key={label} className="inline-flex items-center gap-2">
+                    <span
+                      className="inline-block w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: color }}
+                    />
+                    <span className="text-[12px] text-muted-foreground">{label}</span>
+                    <span className="text-[13px] font-bold tabular-nums font-mono" style={{ color }}>
+                      {formatTokens(value)}
+                    </span>
+                    <span className="text-[12px] text-muted-foreground/60">
+                      {Math.round((value / totalTokens) * 100)}%
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground">No token usage recorded yet.</p>
+          )}
         </CardContent>
       </Card>
 

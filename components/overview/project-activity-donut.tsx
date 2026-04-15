@@ -15,13 +15,14 @@ interface Props {
   projects: ProjectSummary[]
 }
 
+/** Solid hex only — Recharts SVG `fill` does not resolve `var(--*)` reliably (shows as black). */
 const PROJECT_COLORS = [
-  '#d97706', // reddish-orange (primary)
-  '#166534', // dark green
-  'var(--viz-sky)',
-  '#d97706', // orange
-  '#34d399', // light green
-  '#5a6474', // grey (others)
+  '#d97706',
+  '#16a34a',
+  '#2563eb',
+  '#ea580c',
+  '#34d399',
+  '#64748b',
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

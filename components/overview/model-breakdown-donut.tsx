@@ -16,11 +16,11 @@ interface Props {
 }
 
 const MODEL_COLORS = [
-  '#d97706', // orange
-  '#34d399', // green
-  'var(--viz-sky)',
-  '#a78bfa', // purple
-  '#fbbf24', // amber
+  '#d97706',
+  '#34d399',
+  '#2563eb',
+  '#a78bfa',
+  '#fbbf24',
 ]
 
 function shortModelName(model: string): string {
