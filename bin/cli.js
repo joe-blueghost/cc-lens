@@ -37,8 +37,14 @@ function printBanner() {
   console.log()
   art.forEach((line) => console.log('  ' + line))
   console.log()
+  const configDir = process.env.CLAUDE_CONFIG_DIR ?? path.join(os.homedir(), '.claude')
   console.log(`  ${B}${O}Claude Code Lens${R}   ${DIM}—  your ~/.claude/ at a glance${R}`)
   console.log(`  ${DIM}Made with ♥ by ${R}${author}`)
+  console.log()
+  console.log(`  ${DIM}Config dir:${R}  ${O2}${configDir}${R}`)
+  if (process.env.CLAUDE_CONFIG_DIR) {
+    console.log(`  ${DIM}             (from CLAUDE_CONFIG_DIR)${R}`)
+  }
   console.log()
 }
 

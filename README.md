@@ -33,6 +33,26 @@ That's it. The CLI finds a free port, starts the server, and opens the dashboard
 - **Global Search** (`⌘K` / `Ctrl+K` or `/`): Command palette to search across pages, sessions, projects, plans, and memory entries instantly
 - **Keyboard Navigation**: `j`/`k` to move through the sessions list, `Enter` to open, `Esc` to clear; `g`+letter shortcuts to jump to any page (`g s` → sessions, `g p` → projects, `g c` → costs, etc.)
 
+## Multiple Profiles
+
+If you manage separate personal and work Claude Code configurations, use the `CLAUDE_CONFIG_DIR` environment variable to point cc-lens at any directory:
+
+```bash
+# Personal (default — reads ~/.claude/)
+npx cc-lens
+
+# Work profile
+CLAUDE_CONFIG_DIR=~/.claude-work npx cc-lens
+```
+
+On Windows (PowerShell):
+
+```powershell
+$env:CLAUDE_CONFIG_DIR="C:\Users\you\.claude-work"; npx cc-lens
+```
+
+The active config directory is shown in the CLI banner on every launch so you always know which profile is being read.
+
 ## Manual Setup
 
 If you prefer to run it locally from source:

@@ -32,7 +32,7 @@ export async function resolveProjectPath(slug: string): Promise<string> {
   return slugToPath(slug)
 }
 
-const CLAUDE_DIR = path.join(os.homedir(), '.claude')
+const CLAUDE_DIR = process.env.CLAUDE_CONFIG_DIR ?? path.join(os.homedir(), '.claude')
 
 export function claudePath(...segments: string[]): string {
   return path.join(CLAUDE_DIR, ...segments)
